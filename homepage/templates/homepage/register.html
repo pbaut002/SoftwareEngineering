@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+
+<html>
+	{% load static %}
+
+	<head>
+	  <!-- Compiled and minified CSS -->
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+	    <link href='{% static "/login_app/style.css" %}' rel='stylesheet' type='text/css'>
+
+	    <!-- Compiled and minified JavaScript -->
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row">
+				<h3 class="center-align">Grocery Store App</h3>
+				<h2 class="center-align">Registration</h2>
+			</div>
+			<form action="post">
+				<div class="row">
+					<div class="input-field col s3 offset-s3">
+			          <input id="first_name" type="text" class="validate">
+			          <label for="first_name">First Name</label>
+		       		</div>
+			        <div class="input-field col s3">
+			          <input  id="last_name" type="text" class="validate">
+			          <label for="last_name">Last Name</label>
+			        </div>
+			    </div>
+			    <div class="row">
+			    	<div class="input-field col s6 offset-s3">
+			    		<input type="text" class="datepicker"  id="birthdate">
+			    		<label for="birthdate">Birthdate</label>
+			    	</div>
+			    </div>
+			     <div class="row">
+			    	<div class = "input-field col s6 offset-s3">
+						<input id="email" type="email" class="validate">
+						<label for="email">Email</label>
+					</div>
+				</div>
+			    <div class="row">
+			        <div class="col s6 offset-s3 center-align">
+			          <button class="btn waves-effect waves-light center-align btn-large" type="submit" name="createAcc">Create Account</button>
+			        </div>
+			    </div>
+			</form>
+
+		</div>
+	</body>
+</html>
+

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+
+<html>
+{% load static %}
+{% load shopping_extras %}
+
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{% static '/login_app/images/favicon.ico' %}" />
+	<link href='{% static "/login_app/style.css" %}' rel='stylesheet' type='text/css'>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+
+	<script>
+
+		$(document).ready(function(){
+			$('select').formSelect();
+
+	
+			$('.sidenav').sidenav();
+
+
+	
+			$("#darkbutton").click(function(){
+				$('.items').each(function(i,obj){
+					$(this).toggleClass('blue-grey darken-4 darkmode');
+				});
+
+				$('.pageli').toggleClass('blue-grey darken-4 darkmode');
+				$('#page_n').toggleClass('darkmode');
+				$('.inactive_pages').each(function(i,obj){
+					$(this).toggleClass('darkmode');
+				});
+			}); 
+
+			$("#close").click(function(){
+				$("#pop-up").toggle();
+			});
+		 });
+		  
+	</script>
+</head>
+
+<!-- Main Body -->
+<body id="custombg">
+	<!-- Navigation Bar -->
+	<nav>
+		<div class="nav-wrapper">
+			<a href="/homepage" class="brand-logo" style="padding-left: 5px">Grocery Shopping</a>
+
+			<!-- Target for the hamburger drop down menu when it's made too small-->
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+
+			<ul class="right hide-on-med-and-down">
+				<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">monetization_on</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/cart"><i class="material-icons">shopping_cart</i></a></li>
+				<li><a id="darkbutton"><i class="material-icons">brightness_3</i></a></li>
+			</ul>
+
+			
+
+
+		</div>
+
+		<!--Pop-up Bar when the browser is made too small -->
+		<ul class="sidenav" id="nav-mobile">
+			<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i>Search</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">shopping_cart</i>Cart</a></li>
+                <li><a id="darkbutton"><i class="material-icons">brightness_3</i>Dark Mode</a></li>
+		</ul>
+	</nav>	
+
+
+	
+
+
+	<!-- Main Page -->
+	<div class="container" id="browserBody">
+		{% if messages %}
+			<ul class="collection" id="pop-up">
+			{% for message in messages %}
+				{% if message.tags == "success" %}
+					<li class=" green accent-3 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% else %}
+					<li class=" red accent-2 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+		{% endif %}
+		<!-- Item Browser -->
+		<ul class="collection with-header" id="browserBody">
+			<!-- Header Info -->
+			<li class="collection-header items" >
+				<div class="row">
+					<div class="col s4 ">Item Name</div>
+					<div class="col s3 ">Item Price</div>
+					<div class="col s1 ">Store</div>
+					<div class="col s1 center-align">Store Quantity</div>
+					<div class="col s2 right-align">Quantity</div>
+					<div class="col s1 center-align">Add to Cart</div>
+
+				</div>
+			</li>
+
+			<!-- Show items in a main list -->
+			{% for item in Inventory %}
+			<li class="collection-item items" >
+				<div class="row">
+					<div class="col s4">{{item.item}}</div>
+					<div class="col s3">${{item.price}}</div>
+					<div class="col s1">{{item.store}}</div>
+					<div class="col s1 center-align">{{item.stock}}</div>
+					
+					<!-- Sends item and quantity -->
+					<form name="add_to_cart" action="{% url 'homepage:add_to_cart' item.id %}" method="post">
+						{% csrf_token %}
+						<div class="col s1 right-align"></div>
+						<div class="col s1">
+							<!-- Display available quantities based on the available stock-->
+							<select class="browser-default" name="quantities">
+								{% for num in item.stock|get_stock %}
+									<option value="{{num}}" >{{num}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						{% if item.stock > 0 %}
+						<div class="col s1 center-align">
+							<button class="btn-floating waves-effect waves-light" type="submit" href="#!"><i class=material-icons>shopping_cart</i>
+							</button>
+						</div>
+						{% endif %}
+
+						{% if item.stock <= 0 %}
+						<div class="col s1 center-align">
+							<button class=" disabled btn-floating waves-effect waves-light" type="submit" href="#!"><i class=material-icons>shopping_cart</i>
+							</button>
+						</div>
+						{% endif %}
+
+					</form>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+
+		<!-- Page Number Row -->
+		<div class="row">
+			<div class="col s6 offset-m3 offset-14 ">
+				<ul class="pagination center-align pageli" id="pagelist">
+					{% if Inventory.paginator.page_range > 0 %}
+					{% if Inventory.has_previous %}
+					<a href="?page=1"><i class="material-icons">first_page</i></a>
+					<a href="?page={{ Items.previous_page_number }}"><i class="material-icons">chevron_left</i></a> {% else %}
+					<a class="disabled"><i class="material-icons">first_page</i></a>
+					<a class="disabled"><i class="material-icons">chevron_left</i></a> {% endif %}
+
+					
+					<li>
+						{% for num in Inventory.paginator.page_range %} 
+							{% if Inventory.number == num %}
+								<li class="waves-effect active" id="page_n"><a href="?page={{ num }}">{{num}}</a></li>
+							{% elif Inventory.number < 2 and num < Inventory.number|add:'5'%}
+								<li class="waves-effect"><a class="inactive_pages" href="?page={{ num }}">{{num}}</a></li>
+							{% elif Inventory.number == 2 and num < Inventory.number|add:'4'%}
+								<li class="waves-effect"><a class="inactive_pages" href="?page={{ num }}">{{num}}</a></li>
+							{% elif num > Inventory.number|add:'-3' and num < Inventory.number|add:'3'  %}
+								<li class="waves-effect"><a class="inactive_pages" href="?page={{ num }}">{{num}}</a></li>
+							{% endif %}
+						{% endfor %}
+					</li>
+
+					{% if Inventory.has_next %}
+					<a href="?page={{ Inventory.next_page_number }}"><i class="material-icons">chevron_right</i></a>
+					<a href="?page={{ Inventory.paginator.num_pages }}"><i class="material-icons">last_page</i></a> {% else %}
+					<a class="disabled"><i class="material-icons">chevron_right</i></a>
+					<a class="disabled"><i class="material-icons">last_page</i></a> {% endif %}
+
+				</ul>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

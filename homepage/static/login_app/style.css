@@ -1,0 +1,45 @@
+#custombg {
+	background: grey url(images/store.jpg) no-repeat center center fixed;
+	background-size: cover;
+}
+
+nav {
+	background-color: green;
+}
+.messages {
+	position: fixed;
+	top: 100px;
+}
+#items {
+	/*background-color: #2c2f33;
+	color: white;*/
+}
+
+#item-detail{
+	border-style: solid;
+	border-width: 1px;
+}
+
+#page_n{
+	background-color: green;
+}
+
+#page_n, .darkmode{
+	color: white;
+}
+
+.disabled{
+	color: grey;
+}
+
+#pagelist{
+}
+
+.pageli{
+	background-color: white;
+}
+
+.darkmode{
+	color: white !important;
+}
+	

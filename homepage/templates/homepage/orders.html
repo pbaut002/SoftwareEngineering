@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+
+<html>
+{% load static %}
+{% load shopping_extras %}
+
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{% static '/login_app/images/favicon.ico' %}" />
+	<link href='{% static "/login_app/style.css" %}' rel='stylesheet' type='text/css'>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+
+	<script>
+
+		$(document).ready(function(){
+			$('select').formSelect();
+			
+
+			$('.sidenav').sidenav();
+
+			$("#close").click(function(){
+				$("#pop-up").toggle();
+			});
+
+
+
+			$("#shipping_button").click(function(){
+				$("#shipping_address").attr("disabled",this.checked);
+				$("#shipping_City").attr("disabled",this.checked);
+				$("#shipping_zip_code").attr("disabled",this.checked);
+				$("#shipping_State").attr("disabled",this.checked);
+				$('#shipping_country').formSelect();
+				$("#shipping_country").attr("disabled",!this.checked);
+			});
+
+		 });
+		  
+	</script>
+</head>
+
+<body id="custombg">
+	<!-- Navigation Bar -->
+	<nav>
+		<div class="nav-wrapper">
+			<a href="/homepage" class="brand-logo" style="padding-left: 5px">Grocery Shopping</a>
+
+			<!-- Target for the hamburger drop down menu when it's made too small-->
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+
+			<ul class="right hide-on-med-and-down">
+				<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">monetization_on</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/cart"><i class="material-icons">shopping_cart</i></a></li>
+				<li><a id="darkbutton"><i class="material-icons">brightness_3</i></a></li>
+			</ul>
+
+			
+
+
+		</div>
+
+		<!--Pop-up Bar when the browser is made too small -->
+		<ul class="sidenav" id="nav-mobile">
+			<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i>Search</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">shopping_cart</i>Cart</a></li>
+                <li><a id="darkbutton"><i class="material-icons">brightness_3</i>Dark Mode</a></li>
+		</ul>
+	</nav>	
+	
+
+	
+
+
+	<!-- Main Page -->
+	<div class="container" id="browserBody" style="background-color: white">
+		{% if messages %}
+			<ul class="collection" id="pop-up">
+			{% for message in messages %}
+				{% if message.tags == "success" %}
+					<li class=" green accent-3 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% elif message.tags == "warning" %}
+					<li class=" amber lighten-1 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% else %}
+					<li class=" red accent-2 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+		{% endif %}
+		
+		<div class="card">
+			<div class="row">
+				<div class="col s12">
+			Find previous order:
+			<div class="input-field inline">
+			<form method="get" action="{% url 'homepage:retrieve_order' %}">
+            <input id="conf_numb" name="confirmation" placeholder="Confirmation #" type="text" class="validate">
+            </form>
+          </div>
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="row">
+				<div class="col s12">
+					<div class="col s12">
+						<h1>Checkout Form</h1>
+					</div>
+				</div>
+			</div>
+			
+
+			<form name="checkout_form" action="{% url 'homepage:submit_order' %}" method="post">
+				{% csrf_token %}
+				<div class="row">	
+					<div class="col s8">
+						<div class="input-field col s6">
+							<input type="text" id="First_Name" name="First_Name">
+							<label for="First_Name">First Name</label>
+						</div>
+						<div class="input-field col s6">
+							<input type="text" id="Last_Name" name="Last_Name">
+							<label for="Last_Name">Last Name</label>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col s8">
+						<div class="input-field col s12">
+							<input id="email" type="text" class="validate" name="email">
+							<label for="email">Email Address</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+					<div class="input-field col s4">
+							<input name="address" id="address" type="text" class="validate" >
+							<label for="address">Address</label>
+						</div>
+						<div class="input-field col s4">
+							<input name= "city" id="city" type="text" class="validate" pattern="[a-Z]">
+							<label for="city">City</label>
+						</div>
+						<div class="input-field col s2">
+							<input name="zip_code" id="zip_code" type="text" class="validate" pattern="[0-9]{5}">
+							<label for="zip_code">Zip Code</label>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="input-field col s4">
+								<select name="country">
+									<option value="USA">United States of America</option>
+									<option value="CANADA">Canada</option>
+									<option value="MEXICO">Mexico</option>
+								</select>
+								<label>Country/Region</label>
+						</div>
+						<div class="input-field col s4">
+							<input name="state" id="State" type="text" pattern="[A-Z]{2}">
+							<label for="State">State/Province/Region</label>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col s12">
+						<div class="col s12">
+							<h4>Card Information</h4>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+						<div class="input-field col s4">
+							<input name="name_on_card" id="Name_On_Card" type="text" class="validate">
+							<label for="Name_On_Card">Name on Card </label>
+						</div>
+						<div class="input-field col s4">
+							<input name="card_number" id="Card_Number" type="text" class="validate">
+							<label for="Card_Number">Card Number </label>
+						</div>
+						<div class="input-field col s1">
+							<select name="month">
+								{% for m in 1|card_month %}
+									<option value={{m}}>{{m}}</option>
+								{% endfor %}
+							</select>
+							<label class="center-align">MM</label>
+						</div>
+						<div class="input-field col s1">
+							<select name="year">
+								{% for y in 2030|card_year %}
+									<option value="{{y}}">{{y}}</option>
+								{% endfor %}
+							</select>
+							<label class="center-align">YYYY</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+						<div class="col s12">
+							<h4>Shipping Information</h4>
+						</div>
+					</div>
+				</div>
+
+				
+				<div class="row">
+					<div class="col s12">
+						<div class="col s6">
+							<label>
+								<input type="checkbox" id="shipping_button" name="shipping_button" value="1">
+								<span>Same As Billing Address</span>
+							</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+					<div class="input-field col s4" disabled >
+							<input name="shipping_address" id="shipping_address" type="text" class="validate">
+							<label for="shipping_address">Address</label>
+						</div>
+						<div class="input-field col s4">
+							<input name="shipping_City" id="shipping_City" type="text" class="validate" pattern="[a-Z]">
+							<label for="shipping_City">City</label>
+						</div>
+						<div class="input-field col s2">
+							<input name="shipping_zip_code" id="shipping_zip_code" type="text" class="validate" name="shipping_zip_code" pattern="[0-9]{5}">
+							<label for="shipping_zip_code">Zip Code</label>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col s12">
+						<div class="input-field col s4">
+								<select name="shipping_country" id="shipping_country" name="shipping_country">
+									<option value="USA">United States of America</option>
+									<option value="CANADA">Canada</option>
+									<option value="MEXICO">Mexico</option>
+								</select>
+								<label>Country/Region</label>
+						</div>
+						<div class="input-field col s4">
+							<input name="shipping_State" id="shipping_State" type="text">
+							<label for="shipping_State">State/Province/Region</label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+						<div class="col s3">
+							<h4>Delivery Method</h4>
+								<p>
+									<label>
+									  <input class="with-gap" name="Delivery" type="radio" value="D" checked />
+									  <span>Delivery +$5.00</span>
+									</label>
+								</p>
+								<p>
+									<label>
+									  <input class="with-gap" name="Delivery" type="radio" value="P" checked />
+									  <span>Pickup</span>
+									</label>
+								</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col s12">
+						<div class="col s12">
+							<h4>Order Total: {{cart.total_price}}</h4>
+						</div>	
+					</div>
+					<div class="row">
+					</div>
+					<div class="row">
+					</div>
+					<div class="col s12">
+						<div class="col s12">
+						<button class="btn waves-effect waves-light" type="submit">Submit
+				    	<i class="material-icons right">send</i>
+				 		 </button>
+				 		</div>
+				 	</div>
+					<div class="row">
+					</div>
+					<div class="row">
+					</div>
+				</div>
+
+				
+			</form>
+
+
+			
+	</div>
+</body>

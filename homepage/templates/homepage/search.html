@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+
+<meta charset="UTF-8">
+
+<html>
+{% load static %}
+{% load shopping_extras %}
+
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="shortcut icon" type="image/png" href="{% static '/login_app/images/favicon.ico' %}" />
+	<link href='{% static "/login_app/style.css" %}' rel='stylesheet' type='text/css'>
+
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"></script>
+
+	<script>
+
+		$(document).ready(function(){
+			$('select').formSelect();
+
+	
+			$('.sidenav').sidenav();
+
+
+	
+			$("#darkbutton").click(function(){
+				$('.items').each(function(i,obj){
+					$(this).toggleClass('blue-grey darken-4 darkmode');
+				});
+
+				$('.pageli').toggleClass('blue-grey darken-4 darkmode');
+				$('#page_n').toggleClass('darkmode');
+				$('.inactive_pages').each(function(i,obj){
+					$(this).toggleClass('darkmode');
+				});
+			}); 
+
+			$("#close").click(function(){
+				$("#pop-up").toggle();
+			});
+		 });
+		  
+	</script>
+</head>
+
+<!-- Main Body -->
+<body id="custombg">
+	<!-- Navigation Bar -->
+	<nav>
+		<div class="nav-wrapper">
+			<a href="/homepage" class="brand-logo" style="padding-left: 5px">Grocery Shopping</a>
+
+			<!-- Target for the hamburger drop down menu when it's made too small-->
+			<a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
+
+			<ul class="right hide-on-med-and-down">
+				<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">monetization_on</i></a></li>
+				<li><a href="http://127.0.0.1:8000/homepage/cart"><i class="material-icons">shopping_cart</i></a></li>
+				<li><a id="darkbutton"><i class="material-icons">brightness_3</i></a></li>
+			</ul>
+
+			
+
+
+		</div>
+
+		<!--Pop-up Bar when the browser is made too small -->
+		<ul class="sidenav" id="nav-mobile">
+			<li><a href="http://127.0.0.1:8000/homepage/">Item Browser</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/search/"><i class="material-icons prefix">search</i>Search</a></li>
+                <li><a href="http://127.0.0.1:8000/homepage/orders"><i class="material-icons">shopping_cart</i>Cart</a></li>
+                <li><a id="darkbutton"><i class="material-icons">brightness_3</i>Dark Mode</a></li>
+		</ul>
+	</nav>	
+
+
+
+	<!-- Main Page -->
+	<div class="container">
+		{% if messages %}
+			<ul class="collection" id="pop-up">
+			{% for message in messages %}
+				{% if message.tags == "success" %}
+					<li class=" green accent-3 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% else %}
+					<li class=" red accent-2 collection-item center-align">{{ message }}
+						<a class="btn-flat waves-effect right-align" id="close">
+							<i class="material-icons">close</i>
+						</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+			</ul>
+		{% endif %}
+		<div class="row" style="background-color: white">
+			<form action="{% url 'homepage:search_query' %}" method="get">
+				<div class="input-field">
+					<div class="input-field col s12">
+						<i class="material-icons prefix">search</i>
+				        <input name="search" id="Search" type="search" class="validate">
+			        </div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+
+</html>
