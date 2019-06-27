@@ -17,8 +17,7 @@ def homepage(request):
 		# Note: Make a temporary cart object with placeholders
 		request.session.flush()
 		new_cart = Order(date=datetime.datetime.now(),total_price=0,
-						 delivery_address=Address.objects.all().first(),
-						 delivery_choice='D')
+						 delivery_choice='D',delivery_address=Address.objects.all().first(),)
 		new_cart.save()
 		request.session['cart_id'] = new_cart.id
 		request.session['cart_quant'] = {}
