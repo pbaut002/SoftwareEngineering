@@ -26,7 +26,8 @@ SECRET_KEY = 'sv0mv(^^=k0gmki^aq*xffz219wr0l6*7@c^w0n!kk-gq0r87k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['groceryshop362.herokuapp.com']
+ALLOWED_HOSTS = ['groceryshop362.herokuapp.com',
+                 '127.0.0.1']
 
 
 # Application definition
@@ -129,5 +130,5 @@ STATICFILES_DIRS = (
 )
 
 #  Add configuration for static files storage using whitenoise
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 

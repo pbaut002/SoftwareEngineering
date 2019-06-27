@@ -124,7 +124,7 @@
 					<div class="col s3">${{item.price}}</div>
 					<div class="col s1">{{item.store}}</div>
 					<div class="col s1 center-align">{{item.stock}}</div>
-					<div class="col s1 right-align">{{inventory_quantities|get_quant:item.item.name}}</div>
+					<div class="col s1 right-align">{{inventory_quantities|get_quant:item.id}}</div>
 					<div class="col s1"></div>
 					<!-- Sends item and quantity -->
 					<form name="remove_from_cart" action="{% url 'homepage:remove_from_cart' item.id %}" method="post">

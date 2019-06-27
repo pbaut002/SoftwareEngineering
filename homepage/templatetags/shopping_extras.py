@@ -16,7 +16,7 @@ def get_stock(value):
 		return range(13)
 	
 def get_quant(dictionary, key):
-	return dictionary[key]
+	return dictionary[str(key)]
 
 def card_year(year):
 	return range(2019,year)

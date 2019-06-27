@@ -60,7 +60,9 @@ def add_to_cart(request, item):
 			cart = Order.objects.get(id=cart_id)
 			cart.ordered_inventory.add(inventory_item)
 			cart_quantity = request.session['cart_quant']
-			cart_quantity[str(inventory_item.item)] = chosen_quantity
+			cart_quantity[inventory_item.id] = chosen_quantity
+			print(cart_quantity)
+			print(cart_quantity)
 			request.session.modified = True
 			cart.total_price += chosen_quantity * inventory_item.price
 			cart.save()
@@ -155,7 +157,8 @@ def submit_order(request):
 		cart_quantity = request.session['cart_quant']
 		
 		for items in cart_quantity.keys():
-			current_inventory = current_cart.ordered_inventory.get(item=items)		
+			print(items)
+			current_inventory = current_cart.ordered_inventory.get(id=str(items))		
 			if current_inventory:
 				# Check if item exists, otherwise send an error message
 				if current_inventory.stock - cart_quantity[items] < 0:
@@ -237,10 +240,10 @@ def remove_from_cart(request, item):
 	cart_id = request.session['cart_id']
 	cart = Order.objects.get(id=cart_id)
 	quant_dictionary = request.session['cart_quant']
-	item_quantity = quant_dictionary[inventory_item.item.name]
+	item_quantity = quant_dictionary[str(inventory_item.id)]
 
 	cart.total_price -= inventory_item.price * item_quantity
-	del request.session['cart_quant'][inventory_item.item.name]
+	del request.session['cart_quant'][str(inventory_item.id)]
 	request.session.modified = True
 	cart.ordered_inventory.remove(inventory_item)
 	cart.save()
