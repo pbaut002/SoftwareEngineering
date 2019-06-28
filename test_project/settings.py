@@ -82,11 +82,17 @@ WSGI_APPLICATION = 'test_project.wsgi.application'
 DATABASES = {}
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2' ,
-    #     'NAME': 'cpsc362',
-    #     'USER': 'peter',
-    #     'PASSWORD': 'bautista',
-    #     'HOST':'localhost',
-    #     'PORT':'5432',
+    #     'NAME': 'd7ft5keq3s4fhs',
+    #     'USER': 'qdxsznmcmszcte',
+    #     'PASSWORD': '4c96676a1f09b599df77c82f5e88a963f0c6fbb9a884798050e35feed8d011ab',
+    #     'HOST': 'ec2-174-129-227-51.compute-1.amazonaws.com',
+    #     'PORT': '5432',
+    # #     'ENGINE': 'django.db.backends.postgresql_psycopg2' ,
+    # #     'NAME': 'cpsc362',
+    # #     'USER': 'peter',
+    # #     'PASSWORD': 'bautista',
+    # #     'HOST':'localhost',
+    # #     'PORT':'5432',
     # }
 import dj_database_url
 
